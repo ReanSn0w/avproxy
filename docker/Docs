@@ -1,0 +1,20 @@
+FROM golang AS builder
+
+# Добавление информации о сервере
+ADD . /home/
+
+# Настройка окружения
+RUN go install github.com/swaggo/swag/cmd/swag@v1.8.0
+
+# Смена рабочей директории
+WORKDIR /home/
+
+# Запуск генератора документации
+RUN swag init
+
+# Подготовка контейнера с документаций
+FROM swaggerapi/swagger-ui:v4.2.0
+ENV SWAGGER_JSON_URL="swagger.json"
+COPY --from=builder /home/docs/swagger.json /app/
+EXPOSE 8080
+CMD ["sh","/usr/share/nginx/run.sh"]

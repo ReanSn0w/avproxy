@@ -1,0 +1,9 @@
+FROM golang AS builder
+ADD . /home/
+RUN cd /home/ && go build -o app -buildvcs=false .
+
+FROM ubuntu:latest
+WORKDIR /home/
+COPY --from=builder /home/app .
+EXPOSE 8080
+CMD ["/home/app"]
