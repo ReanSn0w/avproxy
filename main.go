@@ -17,7 +17,7 @@ var (
 // @description    Прокси сервер для api animevost
 // @contact.name   Дмитрий Папков
 // @contact.email  papkovda@me.com
-// @host           http://reansn0w.ru
+// @host           reansn0w.ru
 // @BasePath       /avproxy/v1
 func main() {
 	r := chi.NewRouter()
