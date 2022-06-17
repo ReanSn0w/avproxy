@@ -69,7 +69,7 @@ func (item *AVItem) ClearDescription() string {
 }
 
 func (item *AVItem) ClearGenres() []string {
-	return []string{item.Genre}
+	return strings.Split(item.Genre, ", ")
 }
 
 func (item *AVItem) ClearTimer() int64 {
