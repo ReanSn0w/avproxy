@@ -5,7 +5,6 @@ import (
 
 	"github.com/ReanSn0w/avproxy/api"
 	"github.com/go-chi/chi"
-	"github.com/go-chi/cors"
 )
 
 var (
@@ -22,13 +21,7 @@ var (
 func main() {
 	r := chi.NewRouter()
 
-	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"https://*", "http://*"},
-		AllowedMethods:   []string{"GET"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		AllowCredentials: false,
-		MaxAge:           300,
-	}))
+	r.Use(CORS)
 
 	r.Route("/v1", func(r chi.Router) {
 		r.Get("/last", lastTitles)
@@ -37,6 +30,18 @@ func main() {
 	})
 
 	http.ListenAndServe(":8080", r)
+}
+
+func CORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		headers := w.Header()
+		headers.Add("Access-Control-Allow-Origin", "*")
+		headers.Add("Access-Control-Allow-Methods", "GET, OPTIONS")
+		headers.Add("Access-Control-Allow-Headers", "Content-Type")
+		headers.Add("Access-Control-Max-Age", "86400")
+
+		next.ServeHTTP(w, r)
+	})
 }
 
 // @Summary      Список обновлений
