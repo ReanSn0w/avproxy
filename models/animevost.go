@@ -65,7 +65,7 @@ func (item AVItem) ConvertToTitle() Title {
 }
 
 func (item *AVItem) ClearDescription() string {
-	return item.Description
+	return strings.ReplaceAll(item.Description, "<br />", "\n")
 }
 
 func (item *AVItem) ClearGenres() []string {
