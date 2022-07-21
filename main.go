@@ -15,7 +15,7 @@ var (
 )
 
 // @title          AnimeVost API
-// @version        1.0
+// @version        1.1
 // @description    Прокси сервер для api animevost
 // @contact.name   Дмитрий Папков
 // @contact.email  papkovda@me.com
@@ -129,7 +129,7 @@ type Schedule map[string]models.ScheduleItem
 // @Success      200  {object}  Schedule
 // @Failure      400  {object}  api.HTTPError
 // @Failure      500  {object}  api.HTTPError
-// @Router       /info [get]
+// @Router       /schedule [get]
 func scheduleInfo(w http.ResponseWriter, r *http.Request) {
 	timezone := r.URL.Query().Get("tz")
 	if timezone == "" {

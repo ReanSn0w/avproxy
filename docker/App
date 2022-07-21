@@ -4,6 +4,13 @@ RUN cd /home/ && go build -o app -buildvcs=false .
 
 FROM ubuntu:latest
 WORKDIR /home/
+
+# Установка таймзон
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Moscow
+RUN apt-get update -y
+RUN apt-get install -y tzdata
+
 COPY --from=builder /home/app .
 EXPOSE 8080
 CMD ["/home/app"]
