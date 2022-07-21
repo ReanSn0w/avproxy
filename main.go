@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/ReanSn0w/avproxy/api"
+	"github.com/ReanSn0w/avproxy/models"
 	"github.com/ReanSn0w/avproxy/schedule"
 	"github.com/go-chi/chi"
 )
@@ -118,12 +119,14 @@ func titleInfo(w http.ResponseWriter, r *http.Request) {
 	api.SendOK(w, 200, title)
 }
 
+type Schedule map[string]models.ScheduleItem
+
 // @Summary      Расписание
 // @Description  Расписание выхода новых серий (Обновление происходит ежедневно в 10:00 по москве)
 // @Accept       json
 // @Produce      json
 // @Param        tz   query  string  true  "Таймзона для составления расписания. В случае отсутствия используется Europe/Moscow"
-// @Success      200  {object}  models.Title
+// @Success      200  {object}  Schedule
 // @Failure      400  {object}  api.HTTPError
 // @Failure      500  {object}  api.HTTPError
 // @Router       /info [get]
