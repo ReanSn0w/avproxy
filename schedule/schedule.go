@@ -14,6 +14,8 @@ func NewSchedule() *schedule {
 		api: api.NewAPI(),
 	}
 
+	s.Refresh()
+
 	return s
 }
 
@@ -94,7 +96,7 @@ func (s *schedule) findTitles() ([]models.ScheduleItem, error) {
 
 // Запуск механизма обновления расписания
 func (s *schedule) Run() {
-	s.timer = time.NewTicker(time.Second * 3)
+	s.timer = time.NewTicker(s.NextInterval())
 	go s.ticker()
 }
 

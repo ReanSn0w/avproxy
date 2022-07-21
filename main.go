@@ -125,7 +125,7 @@ type Schedule map[string]models.ScheduleItem
 // @Description  Расписание выхода новых серий (Обновление происходит ежедневно в 10:00 по москве)
 // @Accept       json
 // @Produce      json
-// @Param        tz   query  string  true  "Таймзона для составления расписания. В случае отсутствия используется Europe/Moscow"
+// @Param        tz   query  string  false  "Таймзона для составления расписания. В случае отсутствия используется Europe/Moscow"
 // @Success      200  {object}  Schedule
 // @Failure      400  {object}  api.HTTPError
 // @Failure      500  {object}  api.HTTPError
