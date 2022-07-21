@@ -4,11 +4,14 @@ import (
 	"net/http"
 
 	"github.com/ReanSn0w/avproxy/api"
+	"github.com/ReanSn0w/avproxy/models"
+	"github.com/ReanSn0w/avproxy/schedule"
 	"github.com/go-chi/chi"
 )
 
 var (
 	data = api.NewAPI()
+	s    = schedule.NewSchedule()
 )
 
 // @title          AnimeVost API
@@ -27,6 +30,7 @@ func main() {
 		r.Get("/last", lastTitles)
 		r.Get("/search", searchTitles)
 		r.Get("/info", titleInfo)
+		r.Get("/schedule", scheduleInfo)
 	})
 
 	http.ListenAndServe(":8080", r)
@@ -113,4 +117,30 @@ func titleInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	api.SendOK(w, 200, title)
+}
+
+type Schedule map[string]models.ScheduleItem
+
+// @Summary      Расписание
+// @Description  Расписание выхода новых серий (Обновление происходит ежедневно в 10:00 по москве)
+// @Accept       json
+// @Produce      json
+// @Param        tz   query  string  true  "Таймзона для составления расписания. В случае отсутствия используется Europe/Moscow"
+// @Success      200  {object}  Schedule
+// @Failure      400  {object}  api.HTTPError
+// @Failure      500  {object}  api.HTTPError
+// @Router       /info [get]
+func scheduleInfo(w http.ResponseWriter, r *http.Request) {
+	timezone := r.URL.Query().Get("tz")
+	if timezone == "" {
+		timezone = "Europe/Moscow"
+	}
+
+	res, err := s.MakeSchedule(timezone)
+	if err != nil {
+		api.SendError(w, 500, err)
+		return
+	}
+
+	api.SendOK(w, 200, res)
 }
